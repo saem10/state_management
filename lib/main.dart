@@ -11,7 +11,22 @@ class CounterApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        home: HomeScreen(),
+        initialRoute: '/',
+      onGenerateRoute: (RouteSettings settings){
+          late Widget routewidget;
+          if(settings.name == '/'){
+          routewidget = HomeScreen();
+          } else if(settings.name == '/profile'){
+            routewidget = ProfileScreen();
+          } else if(settings.name == '/settings'){
+            routewidget = SettingScreen();
+          }
+
+
+          return MaterialPageRoute(builder: (context){
+            return routewidget;
+          });
+      },
 
 
     );
@@ -47,8 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
               return Text(count.toString(), style: TextStyle(fontSize: 32));
             }),
             TextButton(onPressed: (){
-              Get.to(SettingScreen());
-              //Navigator.push(context, MaterialPageRoute(builder: (context) => SettingScreen()));
+              //Get.to(SettingScreen());
+              Get.toNamed('/settings');
             }, child: Text('Go to Settings'))
           ],
         ),
@@ -75,7 +90,8 @@ class SettingScreen extends StatelessWidget {
         child: Column(
           children: [
             TextButton(onPressed: () {
-              Get.off(ProfileScreen());
+              //Get.off(ProfileScreen());
+              Get.offNamed('/profile');
             },
                 child: Text('Go to Profile')),
             TextButton(onPressed: () {
@@ -100,10 +116,8 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Profile'),),
       body: Center(child: TextButton(onPressed: () {
-        /*Navigator.pushAndRemoveUntil(
-            context, MaterialPageRoute(builder: (context) => HomeScreen()),
-                (predicate) => false);*/
-        Get.offAll(HomeScreen());
+        //Get.offAll(HomeScreen());
+        Get.offAllNamed('/');
       },
           child: Text('Go to Home Screen')),),
     );
