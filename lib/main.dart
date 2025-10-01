@@ -10,7 +10,11 @@ class CounterApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: HomeScreen());
+    return GetMaterialApp(
+        home: HomeScreen(),
+
+
+    );
   }
 }
 
@@ -27,18 +31,81 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Home'), backgroundColor: Colors.green),
+      appBar: AppBar(
+        title: Text('Home'),
+        backgroundColor: Colors.green,
+          actions: [
+          IconButton(onPressed: (){
+            Get.offAll(HomeScreen());
+          }, icon:Icon(Icons.refresh_outlined)),
+        ],
+      ),
       body: Center(
-        child: Obx(() {
-          return Text(count.toString(), style: TextStyle(fontSize: 32));
-        }),
+        child: Column(
+          children: [
+            Obx(() {
+              return Text(count.toString(), style: TextStyle(fontSize: 32));
+            }),
+            TextButton(onPressed: (){
+              Get.to(SettingScreen());
+              //Navigator.push(context, MaterialPageRoute(builder: (context) => SettingScreen()));
+            }, child: Text('Go to Settings'))
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          count++;
+          count ++;
         },
         child: Icon(Icons.add),
       ),
+    );
+  }
+}
+
+class SettingScreen extends StatelessWidget {
+  const SettingScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Settings'),
+        backgroundColor: Colors.green,),
+      body: Center(
+        child: Column(
+          children: [
+            TextButton(onPressed: () {
+              Get.off(ProfileScreen());
+            },
+                child: Text('Go to Profile')),
+            TextButton(onPressed: () {
+              Get.back();
+            },
+                child: Text('Back')),
+
+          ],
+        ),
+
+      ),
+    );
+  }
+}
+
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Profile'),),
+      body: Center(child: TextButton(onPressed: () {
+        /*Navigator.pushAndRemoveUntil(
+            context, MaterialPageRoute(builder: (context) => HomeScreen()),
+                (predicate) => false);*/
+        Get.offAll(HomeScreen());
+      },
+          child: Text('Go to Home Screen')),),
     );
   }
 }
