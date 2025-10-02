@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              counterController.reset();
+              Get.find<CounterController>().reset();
               Get.snackbar(
                 "Counter Reset",
                 "The counter has been reset to 0",
@@ -39,8 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GetBuilder(
-                  init: counterController,
+              GetBuilder<CounterController>(
                   builder: (controller){
                     return Text(
                       controller.count.toString(),
@@ -56,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          counterController.increment();
+          Get.find<CounterController>().increment();
         },
         child: Icon(Icons.add),
       ),

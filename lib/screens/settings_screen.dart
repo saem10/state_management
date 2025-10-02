@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../widget/counter_controller.dart';
+
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
 
@@ -12,6 +14,13 @@ class SettingScreen extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
+            GetBuilder<CounterController>(
+                builder: (controller){
+                  return Text(
+                    controller.count.toString(),
+                    style: TextStyle(fontSize: 32),
+                  );
+                }),
             TextButton(onPressed: () {
               //Get.off(ProfileScreen());
               Get.offNamed('/profile');
@@ -21,10 +30,14 @@ class SettingScreen extends StatelessWidget {
               Get.back();
             },
                 child: Text('Back')),
-
           ],
         ),
-
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.find<CounterController>().increment();
+        },
+        child: Icon(Icons.add),
       ),
     );
   }

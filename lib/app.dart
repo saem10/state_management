@@ -27,7 +27,7 @@ class CounterApp extends StatelessWidget {
           return routewidget;
         });
       },
-      //initialBinding: ControllerBinder(),
+      initialBinding: ControllerBinder(),
     );
   }
 }
