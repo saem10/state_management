@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
 
-class CounterController {
-  RxInt count = 0.obs;
+class CounterController extends GetxController {
+  int count = 0;
 
   void increment(){
     count++;
+    update();
   }
-  void reset() => count.value = 0;
+  void reset() => count = 0;
 }

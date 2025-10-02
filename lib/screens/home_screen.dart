@@ -10,7 +10,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   CounterController counterController = CounterController();
 
   @override
@@ -40,11 +39,15 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Obx(() {
-                return Text(counterController.count.toString(), style: TextStyle(fontSize: 32));
+              GetBuilder(
+                  init: counterController,
+                  builder: (controller){
+                    return Text(
+                      controller.count.toString(),
+                      style: TextStyle(fontSize: 32),
+                    );
               }),
               TextButton(onPressed: (){
-                //Get.to(SettingScreen());
                 Get.toNamed('/settings');
               }, child: Text('Go to Settings'))
             ],

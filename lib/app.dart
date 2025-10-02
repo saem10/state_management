@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:state_management/widget/controller_binder.dart';
 import 'screens/home_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/settings_screen.dart';
@@ -26,8 +27,7 @@ class CounterApp extends StatelessWidget {
           return routewidget;
         });
       },
-
-
+      //initialBinding: ControllerBinder(),
     );
   }
 }
