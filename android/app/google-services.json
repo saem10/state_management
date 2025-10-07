@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "884947998087",
+    "project_id": "ostad-batch-four",
+    "storage_bucket": "ostad-batch-four.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884947998087:android:cfe30390186c4c15beef22",
+        "android_client_info": {
+          "package_name": "com.example.state_management"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhKg1pbcWu0qMbE9U69i5lDgyO3W1l1g4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

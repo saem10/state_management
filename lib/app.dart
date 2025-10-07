@@ -34,7 +34,7 @@ class _LiveScoreListScreenState extends State<LiveScoreListScreen> {
     _footballScoreList.clear();
     QuerySnapshot<Map<String, dynamic>> snapshot = await db.collection('football').get();
     for (QueryDocumentSnapshot<Map<String, dynamic>> doc in snapshot.docs) {
-      print(doc.data());
+      //print(doc.data());
       _footballScoreList.add(FootballScore.fromJson(doc.data(), doc.id));
     }
     _getFootScoreInProgress = false;
