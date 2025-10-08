@@ -21,56 +21,81 @@ class LiveScoreListScreen extends StatefulWidget {
 class _LiveScoreListScreenState extends State<LiveScoreListScreen> {
   FirebaseFirestore db = FirebaseFirestore.instance;
   final List<FootballScore> _footballScoreList = [];
-  bool _getFootScoreInProgress = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _getLiveScoreList();
-  }
-
-  Future<void> _getLiveScoreList() async {
-    _getFootScoreInProgress = true;
-    _footballScoreList.clear();
-    QuerySnapshot<Map<String, dynamic>> snapshot = await db.collection('football').get();
-    for (QueryDocumentSnapshot<Map<String, dynamic>> doc in snapshot.docs) {
-      //print(doc.data());
-      _footballScoreList.add(FootballScore.fromJson(doc.data(), doc.id));
-    }
-    _getFootScoreInProgress = false;
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Score List')),
-      body: Visibility(
-        visible: _getFootScoreInProgress == false,
-        replacement: Center(child: CircularProgressIndicator()),
-        child: ListView.builder(
-          itemCount: _footballScoreList.length,
-          itemBuilder: (context, index) {
-            FootballScore score = _footballScoreList[index];
-            return ListTile(
-              title: Text(score.matchName),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('${score.team1} vs ${score.team2}'),
-                  if (score.isRunning == false)
-                    Text('Winner team is ${score.winnerTeam}'),
-                ],
-              ),
-              trailing: Text('${score.team1_Score}-${score.team2_Score}'),
-              leading: CircleAvatar(
-                backgroundColor: score.isRunning ? Colors.green : Colors.grey,
-                radius: 8,
-              ),
+      body: StreamBuilder(
+        stream: db.collection('football').snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState  == ConnectionState.waiting){
+            return Center(
+              child: CircularProgressIndicator(),
             );
-          },
-        ),
+          }
+          if (snapshot.hasError){
+            return Center(
+              child: Text(snapshot.error.toString()),
+            );
+          }
+          if (snapshot.hasData) {
+            QuerySnapshot<Map<String, dynamic>> querySnapshot = snapshot
+                .data! as QuerySnapshot<Map<String, dynamic>>;
+            _prepareScoreList(querySnapshot);
+            /*for(QueryDocumentSnapshot<Map<String, dynamic>> doc in querySnapshot.docs){
+              _footballScoreList.add(FootballScore.fromJson(doc.data(), doc.id));
+            }*/
+
+            return ListView.builder(
+              itemCount: _footballScoreList.length,
+              itemBuilder: (context, index) {
+                FootballScore score = _footballScoreList[index];
+                return ListTile(
+                  title: Text(score.matchName),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('${score.team1} vs ${score.team2}'),
+                      if (score.isRunning == false)
+                        Text('Winner team is ${score.winnerTeam}'),
+                    ],
+                  ),
+                  trailing: Text('${score.team1_Score}-${score.team2_Score}'),
+                  leading: CircleAvatar(
+                    backgroundColor: score.isRunning ? Colors.green : Colors
+                        .grey,
+                    radius: 8,
+                  ),
+                );
+              },
+            );
+          }
+          return SizedBox();
+        }
       ),
+      floatingActionButton: FloatingActionButton(onPressed: _addMatchScore,
+        child: Icon(Icons.refresh_outlined)),
     );
+  }
+  void _addMatchScore(){FootballScore score = FootballScore(
+      team1: 'Bangladesh',
+      team2: 'England',
+      team1_Score: 2,
+      team2_Score: 7,
+      winnerTeam: '',
+      isRunning: true,
+      matchName: 'BanvsEng',
+    );
+    db.collection('football').doc(score.matchName).set(score.toJson());
+    //db.collection('football').doc(score.matchName).update(score.toJson());
+  }
+
+  void _prepareScoreList(QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+    _footballScoreList.clear();
+    for (QueryDocumentSnapshot<Map<String, dynamic>> doc
+        in querySnapshot.docs) {
+      _footballScoreList.add(FootballScore.fromJson(doc.data(), doc.id));
+    }
   }
 }

@@ -28,5 +28,16 @@ class FootballScore {
       matchName: matchName,
     );
   }
+
+  Map<String, dynamic> toJson(){
+    return{
+      'team1' : team1,
+      'team2' : team2,
+      'team1_score' : team1_Score,
+      'team2_score' : team2_Score,
+      'winner_team' : winnerTeam,
+      'is_running' : isRunning,
+    };
+  }
 }
 
